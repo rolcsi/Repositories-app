@@ -20,9 +20,9 @@ class SyncManager: NSObject {
         self.dataStack = dataStack
     }
     
-    public func checkForRepos() {
+    public func checkForRepos(userUrlString: String) {
         
-        let optionalUrl = URL(string: Constants.applesReposUrl)
+        let optionalUrl = URL(string: userUrlString)
         
         guard let url = optionalUrl else { return }
         

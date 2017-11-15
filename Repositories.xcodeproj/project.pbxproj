@@ -14,11 +14,13 @@
 		C04D2AE21FBAEF91007B5A65 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C04D2AE01FBAEF91007B5A65 /* LaunchScreen.storyboard */; };
 		C04D2AED1FBAEF91007B5A65 /* RepositoriesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D2AEC1FBAEF91007B5A65 /* RepositoriesTests.swift */; };
 		C04D2AF81FBAEF91007B5A65 /* RepositoriesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D2AF71FBAEF91007B5A65 /* RepositoriesUITests.swift */; };
-		C04D2B061FBB1CFF007B5A65 /* ReposViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D2B051FBB1CFF007B5A65 /* ReposViewController.swift */; };
 		C04D2B0B1FBB1F1D007B5A65 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C04D2B091FBB1F1D007B5A65 /* Model.xcdatamodeld */; };
 		C04D2B0D1FBB1FAF007B5A65 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D2B0C1FBB1FAF007B5A65 /* SyncManager.swift */; };
 		C04D2B0F1FBB1FC2007B5A65 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D2B0E1FBB1FC2007B5A65 /* Constants.swift */; };
 		C04D2B111FBB1FD2007B5A65 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D2B101FBB1FD2007B5A65 /* Extensions.swift */; };
+		C04D2B141FBB3F65007B5A65 /* ReposViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D2B131FBB3F65007B5A65 /* ReposViewController.swift */; };
+		C04D2B161FBB3F98007B5A65 /* ReposTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D2B151FBB3F98007B5A65 /* ReposTableViewCell.swift */; };
+		C04D2B181FBB9971007B5A65 /* WKWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D2B171FBB9971007B5A65 /* WKWebViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,11 +56,13 @@
 		C04D2AF31FBAEF91007B5A65 /* RepositoriesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RepositoriesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C04D2AF71FBAEF91007B5A65 /* RepositoriesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoriesUITests.swift; sourceTree = "<group>"; };
 		C04D2AF91FBAEF91007B5A65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C04D2B051FBB1CFF007B5A65 /* ReposViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReposViewController.swift; sourceTree = "<group>"; };
 		C04D2B0A1FBB1F1D007B5A65 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		C04D2B0C1FBB1FAF007B5A65 /* SyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		C04D2B0E1FBB1FC2007B5A65 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C04D2B101FBB1FD2007B5A65 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		C04D2B131FBB3F65007B5A65 /* ReposViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReposViewController.swift; sourceTree = "<group>"; };
+		C04D2B151FBB3F98007B5A65 /* ReposTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReposTableViewCell.swift; sourceTree = "<group>"; };
+		C04D2B171FBB9971007B5A65 /* WKWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKWebViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,7 +135,8 @@
 			children = (
 				C04D2B071FBB1E5A007B5A65 /* Database */,
 				C04D2B081FBB1E64007B5A65 /* Support */,
-				C04D2B051FBB1CFF007B5A65 /* ReposViewController.swift */,
+				C04D2B121FBB3F65007B5A65 /* Repos */,
+				C04D2B171FBB9971007B5A65 /* WKWebViewController.swift */,
 				C04D2AD71FBAEF91007B5A65 /* AppDelegate.swift */,
 				C04D2ADB1FBAEF91007B5A65 /* Main.storyboard */,
 				C04D2ADE1FBAEF91007B5A65 /* Assets.xcassets */,
@@ -175,6 +180,15 @@
 				C04D2B0C1FBB1FAF007B5A65 /* SyncManager.swift */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		C04D2B121FBB3F65007B5A65 /* Repos */ = {
+			isa = PBXGroup;
+			children = (
+				C04D2B131FBB3F65007B5A65 /* ReposViewController.swift */,
+				C04D2B151FBB3F98007B5A65 /* ReposTableViewCell.swift */,
+			);
+			path = Repos;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -372,10 +386,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C04D2B161FBB3F98007B5A65 /* ReposTableViewCell.swift in Sources */,
+				C04D2B141FBB3F65007B5A65 /* ReposViewController.swift in Sources */,
 				C04D2B0F1FBB1FC2007B5A65 /* Constants.swift in Sources */,
+				C04D2B181FBB9971007B5A65 /* WKWebViewController.swift in Sources */,
 				C04D2B111FBB1FD2007B5A65 /* Extensions.swift in Sources */,
 				C04D2B0D1FBB1FAF007B5A65 /* SyncManager.swift in Sources */,
-				C04D2B061FBB1CFF007B5A65 /* ReposViewController.swift in Sources */,
 				C04D2AD81FBAEF91007B5A65 /* AppDelegate.swift in Sources */,
 				C04D2B0B1FBB1F1D007B5A65 /* Model.xcdatamodeld in Sources */,
 			);
