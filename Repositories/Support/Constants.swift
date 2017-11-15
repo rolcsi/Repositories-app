@@ -10,7 +10,15 @@ import UIKit
 
 enum Constants {
     
-    private static let api = "https://api.github.com"
+    static let api = "https://api.github.com"
+    private static let searchOrgsPre = "/search/users?q="
+    private static let searchOrgsPost = "&per_page=10" //"+type:org&per_page=10"
     
-    static let applesReposUrl = api + "/orgs/apple/repos"
+    static func searchOrgUrl(for name: String?) -> URL? {
+        
+        guard let name = name else { return nil }
+        
+        let urlString = api + searchOrgsPre + name + searchOrgsPost
+        return URL(string: urlString)
+    }
 }

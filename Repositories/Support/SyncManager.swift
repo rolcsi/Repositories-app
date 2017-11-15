@@ -12,7 +12,7 @@ import Sync
 
 class SyncManager: NSObject {
 
-    var dataStack: DataStack!
+    var dataStack: DataStack?
     
     init(dataStack: DataStack) {
         super.init()
@@ -20,30 +20,30 @@ class SyncManager: NSObject {
         self.dataStack = dataStack
     }
     
-    public func checkForRepos(userUrlString: String) {
+    public func checkForRepos(user: User) {
         
-        let optionalUrl = URL(string: userUrlString)
+        let optionalUrl = URL(string: user.repos)
         
         guard let url = optionalUrl else { return }
         
         let request = Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default)
         request.responseJSON { (response) in
             
-            if case .success(let json) = response.result {
+            guard case .success(let json) = response.result else { return }
                 
-                guard let dict = json as? [[String : Any]] else { return }
+            guard let dict = json as? [[String : Any]] else { return }
+            
+            self.dataStack?.performInNewBackgroundContext { context in
                 
-                self.dataStack.performInNewBackgroundContext { context in
+                context.sync(dict, inEntityNamed: "CDRepo", predicate: NSPredicate(format: "owner.id = %@", user.id), parent: nil, completion: { (error) in
                     
-                    context.sync(dict, inEntityNamed: "CDRepo", completion: { (error) in
-                        
-                        print("sync done")
-                        guard let _ = error else { return }
-                        
-                        // TODO: handle error
-                        print("sync error")
-                    })
-                }
+                    print("sync done")
+                    
+                    guard let _ = error else { return }
+                    
+                    // TODO: handle error
+                    print("sync error")
+                })
             }
         }
     }

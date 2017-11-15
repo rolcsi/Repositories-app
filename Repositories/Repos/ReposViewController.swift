@@ -11,35 +11,34 @@ import DATASource
 import Sync
 
 class ReposViewController: UIViewController {
-
-    var userUrlString: String?
-    
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var starsCountLabel: UILabel!
-    @IBOutlet weak var updatedAtLabel: UILabel!
     
     @IBOutlet weak var tableView: UITableView!
+    
+    var user: User?
     
     private let dataStack = DataStack(modelName: "Model")
     private lazy var dataSource: DATASource = {
         
+        guard let user = self.user else {
+            fatalError("User \(String(describing: self.user)) not found")
+        }
+        
         let request: NSFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CDRepo")
         request.sortDescriptors = [NSSortDescriptor(key: "updatedAt", ascending: true),
-                                   NSSortDescriptor(key: "name", ascending: true)]
+                                   NSSortDescriptor(key: "fullName", ascending: true)]
+        request.predicate = NSPredicate(format: "owner.id = %@", user.id)
         
         let dataSource = DATASource(tableView: self.tableView,
-                                    cellIdentifier: "ReposTableViewCell",
+                                    cellIdentifier: "BasicTableViewCell",
                                     fetchRequest: request,
                                     mainContext: self.dataStack.mainContext,
                                     configuration: { cell, item, _ in
                                         
-                                        guard let cell = cell as? ReposTableViewCell else {
-                                            fatalError("\(ReposTableViewCell.self) not loaded")
+                                        guard let cell = cell as? BasicTableViewCell else {
+                                            fatalError("\(BasicTableViewCell.self) not loaded")
                                         }
                                         
-                                        cell.nameLabel.text = String.bindNilOrEmpty(item.value(forKey: "name"))
+                                        cell.nameLabel.text = String.bindNilOrEmpty(item.value(forKey: "fullName"))
                                         cell.descriptionLabel.text = String.bindNilOrEmpty(item.value(forKey: "summary"))
                                         cell.starsCountLabel.text = String.bindNilOrEmpty(item.value(forKey: "starsCount"))
                                         cell.updatedAtLabel.text = String.bindNilOrEmpty(item.value(forKey: "updatedAt"))
@@ -54,15 +53,17 @@ class ReposViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.userUrlString = Constants.applesReposUrl
+        guard let user = self.user else {
+            fatalError("User \(String(describing: self.user)) not found")
+        }
         
-        guard let urlString = self.userUrlString else { return }
-        self.title = urlString
-        
+        self.tableView.register(UINib(nibName: "BasicTableViewCell", bundle: nil), forCellReuseIdentifier: "BasicTableViewCell")
         self.tableView.dataSource = self.dataSource
         
+        self.title = user.repos.replacingOccurrences(of: Constants.api, with: "")
+        
         let sync = SyncManager(dataStack: dataStack)
-        sync.checkForRepos(userUrlString: urlString)
+        sync.checkForRepos(user: user)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

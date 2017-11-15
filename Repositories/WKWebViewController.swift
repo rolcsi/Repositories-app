@@ -22,8 +22,10 @@ class WKWebViewController: UIViewController, WKNavigationDelegate {
         
         guard let urlString = self.urlString else { return }
         let tempUrl = URL(string: urlString)
+        
         guard let url = tempUrl else { return }
         let request = URLRequest(url: url)
+        
         webView.load(request)
     }
 
