@@ -8,23 +8,37 @@
 
 import UIKit
 import Alamofire
+import ReactiveSwift
 
 class SearchManager: NSObject {
 
-    public static func serchOrgs(with string: String?, closure: @escaping ([User]) -> Void) {
+    static func createSearchSP(with string: String?) -> SignalProducer<[User], NSError> {
+        return SignalProducer<[User], NSError> { observer, _ in
 
-        let optionalUrl = Constants.searchOrgUrl(for: string)
+            let optionalUrl = Constants.searchOrgUrl(for: string)
 
-        guard let url = optionalUrl else { return }
+            guard let url = optionalUrl else { return }
 
-        let request = Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default)
-        request.responseJSON { (response) in
+            debugPrint("CreateSearchSP is main thread? \(Thread.current.isMainThread)")
 
-            if case .success(let json) = response.result {
+            let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
+            let request = Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default)
 
-                guard let dict = json as? [String: Any], let items = dict["items"] as? [[String: Any]] else { return }
-                closure(self.parseUsers(items: items))
-            }
+            request.responseJSON(queue: queue, completionHandler: { (response) in
+
+                if case .success(let json) = response.result {
+
+                    guard let dict = json as? [String: Any], let items = dict["items"] as? [[String: Any]] else { return }
+
+                    observer.send(value: self.parseUsers(items: items))
+                } else {
+
+                    observer.send(error: NSError())
+                    return
+                }
+
+                observer.sendCompleted()
+            })
         }
     }
 

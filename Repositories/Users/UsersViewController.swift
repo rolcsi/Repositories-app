@@ -9,6 +9,8 @@
 import UIKit
 import DATASource
 import Sync
+import ReactiveSwift
+import Result
 
 class UsersViewController: UIViewController {
 
@@ -17,7 +19,8 @@ class UsersViewController: UIViewController {
     private static let cellName = "BasicTableViewCell"
     private static let detailIdentifier = "openRepo"
 
-    var array: [Any] = []
+    var array: MutableProperty<[User]> = MutableProperty([])
+
     let searchController = UISearchController(searchResultsController: nil)
 
     override func viewDidLoad() {
@@ -30,6 +33,14 @@ class UsersViewController: UIViewController {
         self.navigationItem.searchController = searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
         self.definesPresentationContext = true
+
+        self.array.producer
+            .observe(on: UIScheduler())
+            .startWithResult {_ in
+
+                self.tableView.reloadData()
+        }
+
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -47,12 +58,11 @@ extension UsersViewController: UISearchBarDelegate {
 
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-        SearchManager.serchOrgs(with: searchBar.text) { users in
+        self.array <~ SearchManager.createSearchSP(with: searchBar.text)
+            .flatMapError({ (_) -> SignalProducer<[User], NoError> in
 
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            self.array =  users
-            self.tableView.reloadData()
-        }
+                return SignalProducer<[User], NoError>.empty
+        })
     }
 }
 
@@ -60,7 +70,7 @@ extension UsersViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        return self.array.count
+        return self.array.value.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -70,10 +80,10 @@ extension UsersViewController: UITableViewDataSource {
                 fatalError("\(BasicTableViewCell.self) not loaded")
         }
 
-        let user = self.array[indexPath.row] as? User
-        cell.nameLabel.text = user?.login
-        cell.descriptionLabel.text = user?.repos
-        cell.avatarImageView.downloadImage(from: user?.avatar)
+        let user = self.array.value[indexPath.row]
+        cell.nameLabel.text = user.login
+        cell.descriptionLabel.text = user.repos
+        cell.avatarImageView.downloadImage(from: user.avatar)
 
         return cell
     }
@@ -85,7 +95,7 @@ extension UsersViewController: UITableViewDelegate {
 
         tableView.deselectRow(at: indexPath, animated: true)
 
-        let user = self.array[indexPath.row] as? User
+        let user = self.array.value[indexPath.row]
         self.performSegue(withIdentifier: UsersViewController.detailIdentifier, sender: user)
     }
 }
