@@ -16,6 +16,9 @@ class ReposViewController: UIViewController {
     
     var user: User?
     
+    private static let cellName = "BasicTableViewCell"
+    private static let detailIdentifier = "openWebView"
+    
     private let dataStack = DataStack(modelName: "Model")
     private lazy var dataSource: DATASource = {
         
@@ -29,7 +32,7 @@ class ReposViewController: UIViewController {
         request.predicate = NSPredicate(format: "owner.id = %@", user.id)
         
         let dataSource = DATASource(tableView: self.tableView,
-                                    cellIdentifier: "BasicTableViewCell",
+                                    cellIdentifier: ReposViewController.cellName,
                                     fetchRequest: request,
                                     mainContext: self.dataStack.mainContext,
                                     configuration: { cell, item, _ in
@@ -43,6 +46,7 @@ class ReposViewController: UIViewController {
                                         cell.starsCountLabel.text = String.bindNilOrEmpty(item.value(forKey: "starsCount"))
                                         cell.updatedAtLabel.text = String.bindNilOrEmpty(item.value(forKey: "updatedAt"))
                                         
+                                        cell.starsImageView.image = #imageLiteral(resourceName: "star_icon")
                                         guard let owner = item.value(forKey: "owner") as? CDOwner else { return }
                                         cell.avatarImageView.downloadImage(from: owner.avatarUrl)
         })
@@ -57,7 +61,7 @@ class ReposViewController: UIViewController {
             fatalError("User \(String(describing: self.user)) not found")
         }
         
-        self.tableView.register(UINib(nibName: "BasicTableViewCell", bundle: nil), forCellReuseIdentifier: "BasicTableViewCell")
+        self.tableView.register(UINib(nibName: ReposViewController.cellName, bundle: nil), forCellReuseIdentifier: ReposViewController.cellName)
         self.tableView.dataSource = self.dataSource
         
         self.title = user.repos.replacingOccurrences(of: Constants.api, with: "")
@@ -82,6 +86,6 @@ extension ReposViewController: UITableViewDelegate {
         
         let item = self.dataSource.object(indexPath)
         let urlString = item?.value(forKey: "htmlUrl")
-        self.performSegue(withIdentifier: "openWebView", sender: urlString)
+        self.performSegue(withIdentifier: ReposViewController.detailIdentifier, sender: urlString)
     }
 }

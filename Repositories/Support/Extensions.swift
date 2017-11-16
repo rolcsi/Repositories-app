@@ -58,3 +58,19 @@ extension UIImageView {
         }
     }
 }
+
+extension UIAlertController {
+    
+    static func simpleAlert(text: String, completion: (() -> Void)? = nil) -> UIAlertController {
+        
+        let alertController = UIAlertController(title: "Alert", message: text, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: { (action) in
+            
+            if let completion = completion {
+                completion()
+            }
+        }))
+        
+        return alertController
+    }
+}

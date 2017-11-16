@@ -26,7 +26,6 @@ class SearchManager: NSObject {
                 closure(self.parseUsers(items: items))
             }
         }
-        
     }
     
     // MARK: Private methods

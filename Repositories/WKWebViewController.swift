@@ -30,14 +30,21 @@ class WKWebViewController: UIViewController, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        print("Start to load")
+        
+        debugPrint("Start to load")
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        print("Finish to load")
+        
+        debugPrint("Finish to load")
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        print(error.localizedDescription)
+        
+        debugPrint(error.localizedDescription)
+        let alert = UIAlertController.simpleAlert(text: error.localizedDescription)
+        self.present(alert, animated: true)
     }
 }

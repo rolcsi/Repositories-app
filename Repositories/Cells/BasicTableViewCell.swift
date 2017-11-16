@@ -15,4 +15,19 @@ class BasicTableViewCell: UITableViewCell {
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var starsCountLabel: UILabel!
     @IBOutlet weak var updatedAtLabel: UILabel!
+    @IBOutlet weak var starsImageView: UIImageView!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        self.nameLabel.text = ""
+        self.descriptionLabel.text = ""
+        self.starsCountLabel.text = ""
+        self.updatedAtLabel.text = ""
+        
+        self.avatarImageView.image = nil
+        self.starsImageView.image = nil
+    }
 }
+
+

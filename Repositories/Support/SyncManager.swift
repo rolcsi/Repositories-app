@@ -37,12 +37,11 @@ class SyncManager: NSObject {
                 
                 context.sync(dict, inEntityNamed: "CDRepo", predicate: NSPredicate(format: "owner.id = %@", user.id), parent: nil, completion: { (error) in
                     
-                    print("sync done")
+                    debugPrint("sync done")
                     
                     guard let _ = error else { return }
                     
-                    // TODO: handle error
-                    print("sync error")
+                    debugPrint("sync error")
                 })
             }
         }
