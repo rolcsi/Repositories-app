@@ -19,7 +19,7 @@ class ReposViewController: UIViewController {
     private static let cellName = "BasicTableViewCell"
     private static let detailIdentifier = "openWebView"
 
-    private let dataStack = DataStack(modelName: "Model")
+    var dataStack: DataStack!
     private lazy var dataSource: DATASource = {
 
         guard let user = self.user else {
@@ -66,7 +66,7 @@ class ReposViewController: UIViewController {
 
         self.title = user.repos.replacingOccurrences(of: Constants.api, with: "")
 
-        let sync = SyncManager(dataStack: dataStack)
+        let sync = SyncManager(dataStack: self.dataStack)
         sync.checkForRepos(user: user)
     }
 

@@ -7,4 +7,6 @@ target ‘Repositories’ do
     pod 'Sync'
     pod 'DATASource'
     pod 'SwiftLint'
+    pod 'Swinject'
+    pod 'SwinjectStoryboard'
 end
