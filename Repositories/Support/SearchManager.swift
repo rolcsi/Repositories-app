@@ -17,15 +17,16 @@ class SearchManager: NSObject {
 
         guard let url = optionalUrl else { return }
 
+        let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
         let request = Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default)
-        request.responseJSON { (response) in
+        request.responseJSON(queue: queue, completionHandler: { (response) in
 
             if case .success(let json) = response.result {
 
                 guard let dict = json as? [String: Any], let items = dict["items"] as? [[String: Any]] else { return }
                 closure(self.parseUsers(items: items))
             }
-        }
+        })
     }
 
     // MARK: Private methods

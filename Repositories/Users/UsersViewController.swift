@@ -49,9 +49,12 @@ extension UsersViewController: UISearchBarDelegate {
 
         SearchManager.serchOrgs(with: searchBar.text) { users in
 
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            self.array =  users
-            self.tableView.reloadData()
+            DispatchQueue.main.async {
+                
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.array =  users
+                self.tableView.reloadData()
+            }
         }
     }
 }
@@ -73,7 +76,7 @@ extension UsersViewController: UITableViewDataSource {
         let user = self.array[indexPath.row] as? User
         cell.nameLabel.text = user?.login
         cell.descriptionLabel.text = user?.repos
-        cell.avatarImageView.image = nil
+        cell.avatarImageView.image = #imageLiteral(resourceName: "no_image")
         cell.avatarImageView.downloadImage(from: user?.avatar)
 
         return cell

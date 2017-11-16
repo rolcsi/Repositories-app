@@ -26,8 +26,9 @@ class SyncManager: NSObject {
 
         guard let url = optionalUrl else { return }
 
+        let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
         let request = Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default)
-        request.responseJSON { (response) in
+        request.responseJSON(queue: queue, completionHandler: { (response) in
 
             guard case .success(let json) = response.result else { return }
 
@@ -44,6 +45,6 @@ class SyncManager: NSObject {
                     debugPrint("sync error")
                 })
             }
-        }
+        })
     }
 }
