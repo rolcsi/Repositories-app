@@ -4,6 +4,7 @@ use_frameworks!
 
 target ‘Repositories’ do
 	pod 'Alamofire'
-    	pod 'Sync'
-    	pod 'DATASource'
+    pod 'Sync'
+    pod 'DATASource'
+    pod 'SwiftLint'
 end

@@ -232,6 +232,7 @@
 				C04D2AD21FBAEF91007B5A65 /* Resources */,
 				4C36D88518B887EBCD41FD10 /* [CP] Embed Pods Frameworks */,
 				D9E586224F4F794FC9AC1950 /* [CP] Copy Pods Resources */,
+				C0868C561FBDC04600991E0F /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -374,6 +375,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Repositories/Pods-Repositories-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		C0868C561FBDC04600991E0F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"";
 		};
 		D9E586224F4F794FC9AC1950 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
