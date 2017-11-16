@@ -9,4 +9,5 @@ target ‘Repositories’ do
     pod 'SwiftLint'
     pod 'Swinject'
     pod 'SwinjectStoryboard'
+    pod 'ReactiveSwift'
 end
