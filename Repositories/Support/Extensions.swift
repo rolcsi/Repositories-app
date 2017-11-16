@@ -79,16 +79,16 @@ extension UIAlertController {
 }
 
 extension SwinjectStoryboard {
-    
+
     @objc class func setup() {
-        
+
         defaultContainer.storyboardInitCompleted(ReposViewController.self) { r, c in
             c.dataStack = r.resolve(DataStack.self)
         }
         defaultContainer.register(DataStack.self) { _ in
             DataStack(modelName: "Model")
         }
-        
+
         Container.loggingFunction = nil
     }
 }

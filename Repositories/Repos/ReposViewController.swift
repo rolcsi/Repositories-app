@@ -48,6 +48,7 @@ class ReposViewController: UIViewController {
 
                                         cell.starsImageView.image = #imageLiteral(resourceName: "star_icon")
                                         guard let owner = item.value(forKey: "owner") as? CDOwner else { return }
+                                        cell.avatarImageView.image = nil
                                         cell.avatarImageView.downloadImage(from: owner.avatarUrl)
         })
 

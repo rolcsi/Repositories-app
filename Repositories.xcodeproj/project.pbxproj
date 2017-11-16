@@ -395,7 +395,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"";
+			shellScript = "#\"${PODS_ROOT}/SwiftLint/swiftlint\"";
 		};
 		D9E586224F4F794FC9AC1950 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
