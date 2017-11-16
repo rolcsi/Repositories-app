@@ -80,10 +80,11 @@ extension UsersViewController: UITableViewDataSource {
                 fatalError("\(BasicTableViewCell.self) not loaded")
         }
 
-        let user = self.array.value[indexPath.row]
-        cell.nameLabel.text = user.login
-        cell.descriptionLabel.text = user.repos
-        cell.avatarImageView.downloadImage(from: user.avatar)
+        let user = self.array[indexPath.row] as? User
+        cell.nameLabel.text = user?.login
+        cell.descriptionLabel.text = user?.repos
+        cell.avatarImageView.image = nil
+        cell.avatarImageView.downloadImage(from: user?.avatar)
 
         return cell
     }
