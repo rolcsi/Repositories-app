@@ -50,7 +50,7 @@ extension UsersViewController: UISearchBarDelegate {
         SearchManager.serchOrgs(with: searchBar.text) { users in
 
             DispatchQueue.main.async {
-                
+
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.array =  users
                 self.tableView.reloadData()
