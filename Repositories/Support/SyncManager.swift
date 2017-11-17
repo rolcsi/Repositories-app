@@ -9,6 +9,8 @@
 import UIKit
 import Alamofire
 import Sync
+import ReactiveSwift
+import Result
 
 class SyncManager: NSObject {
 
@@ -20,30 +22,38 @@ class SyncManager: NSObject {
         self.dataStack = dataStack
     }
 
-    public func checkForRepos(user: User) {
-
-        let optionalUrl = URL(string: user.repos)
-
-        guard let url = optionalUrl else { return }
-
-        let request = Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default)
-        request.responseJSON { (response) in
-
-            guard case .success(let json) = response.result else { return }
-
-            guard let dict = json as? [[String: Any]] else { return }
-
-            self.dataStack?.performInNewBackgroundContext { context in
-
-                context.sync(dict, inEntityNamed: "CDRepo", predicate: NSPredicate(format: "owner.id = %@", user.id), parent: nil, completion: { (error) in
-
-                    debugPrint("sync done")
-
-                    guard let _ = error else { return }
-
-                    debugPrint("sync error")
-                })
-            }
+    func createSyncSignal(user: User) -> SignalProducer<(), NSError> {
+        
+        return SignalProducer<(), NSError> { observer, _ in
+            
+            let optionalUrl = URL(string: user.repos)
+            
+            guard let url = optionalUrl else { return }
+            
+            debugPrint("CreateSyncSP is main thread? \(Thread.current.isMainThread)")
+            
+            let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
+            let request = Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default)
+            request.responseJSON(queue: queue, completionHandler: { (response) in
+                
+                guard case .success(let json) = response.result else { return }
+                
+                guard let dict = json as? [[String: Any]] else { return }
+                
+                self.dataStack?.performInNewBackgroundContext { context in
+                    
+                    context.sync(dict, inEntityNamed: "CDRepo", predicate: NSPredicate(format: "owner.id = %@", user.id), parent: nil, completion: { (error) in
+                        
+                        guard let _ = error else {
+                            
+                            observer.sendCompleted()
+                            return
+                        }
+                        
+                        observer.send(error: NSError())
+                    })
+                }
+            })
         }
     }
 }

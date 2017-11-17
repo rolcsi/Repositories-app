@@ -81,10 +81,8 @@ extension UsersViewController: UITableViewDataSource {
         }
 
         let user = self.array.value[indexPath.row]
-        cell.nameLabel.text = user.login
-        cell.descriptionLabel.text = user.repos
-        cell.avatarImageView.image = nil
-        cell.avatarImageView.downloadImage(from: user.avatar)
+        
+        cell.model.swap(user)
 
         return cell
     }
@@ -100,3 +98,4 @@ extension UsersViewController: UITableViewDelegate {
         self.performSegue(withIdentifier: UsersViewController.detailIdentifier, sender: user)
     }
 }
+

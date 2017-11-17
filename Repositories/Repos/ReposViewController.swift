@@ -20,6 +20,7 @@ class ReposViewController: UIViewController {
     private static let detailIdentifier = "openWebView"
 
     var dataStack: DataStack!
+    
     private lazy var dataSource: DATASource = {
 
         guard let user = self.user else {
@@ -41,15 +42,7 @@ class ReposViewController: UIViewController {
                                             fatalError("\(BasicTableViewCell.self) not loaded")
                                         }
 
-                                        cell.nameLabel.text = String.bindNilOrEmpty(item.value(forKey: "fullName"))
-                                        cell.descriptionLabel.text = String.bindNilOrEmpty(item.value(forKey: "summary"))
-                                        cell.starsCountLabel.text = String.bindNilOrEmpty(item.value(forKey: "starsCount"))
-                                        cell.updatedAtLabel.text = String.bindNilOrEmpty(item.value(forKey: "updatedAt"))
-
-                                        cell.starsImageView.image = #imageLiteral(resourceName: "star_icon")
-                                        guard let owner = item.value(forKey: "owner") as? CDOwner else { return }
-                                        cell.avatarImageView.image = nil
-                                        cell.avatarImageView.downloadImage(from: owner.avatarUrl)
+                                        cell.model.swap(Repo(item: item))
         })
 
         return dataSource
@@ -68,7 +61,11 @@ class ReposViewController: UIViewController {
         self.title = user.repos.replacingOccurrences(of: Constants.api, with: "")
 
         let sync = SyncManager(dataStack: self.dataStack)
-        sync.checkForRepos(user: user)
+        sync.createSyncSignal(user: user).startWithFailed { (error) in
+            
+            let alert = UIAlertController.simpleAlert(text: error.localizedDescription)
+            self.present(alert, animated: true)
+        }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
