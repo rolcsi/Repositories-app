@@ -40,7 +40,6 @@ class UsersViewController: UIViewController {
 
                 self.tableView.reloadData()
         }
-
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -81,7 +80,6 @@ extension UsersViewController: UITableViewDataSource {
         }
 
         let user = self.array.value[indexPath.row]
-        
         cell.model.swap(user)
 
         return cell
@@ -98,4 +96,3 @@ extension UsersViewController: UITableViewDelegate {
         self.performSegue(withIdentifier: UsersViewController.detailIdentifier, sender: user)
     }
 }
-

@@ -17,35 +17,49 @@ class BasicTableViewCell: UITableViewCell {
     @IBOutlet weak var starsCountLabel: UILabel!
     @IBOutlet weak var updatedAtLabel: UILabel!
     @IBOutlet weak var starsImageView: UIImageView!
-    
+
     var model: MutableProperty<Any> = MutableProperty(Repo())
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        self.starsCountLabel.text = ""
+//        self.starsCountLabel.text = ""
+//        self.updatedAtLabel.text = ""
         self.starsImageView.image = nil
-        
+
         self.model.producer
-            .startWithValues{ (model) in
-            
-                if let user = model as? User {
-                 
-                    self.nameLabel.text = user.login
-                    self.descriptionLabel.text = user.repos
-                    self.avatarImageView.image = #imageLiteral(resourceName: "no_image")
-                    self.avatarImageView.downloadImage(from: user.avatar)
-                } else if let repo = model as? Repo {
-                    
-                    self.nameLabel.text = repo.login
-                    self.descriptionLabel.text = repo.description
-                    self.starsCountLabel.text = repo.starsCount
-                    self.updatedAtLabel.text = repo.updatedAt
-                    
-                    self.starsImageView.image = #imageLiteral(resourceName: "star_icon")
-                    self.avatarImageView.image = #imageLiteral(resourceName: "no_image")
-                    self.avatarImageView.downloadImage(from: repo.avatar)
+            .startWithValues { (model) in
+
+                if let repo = model as? Repo {
+
+                    self.setCell(model: repo)
+                } else if let user = model as? User {
+
+                    self.setCell(model: user)
                 }
             }
+    }
+
+    // MARK: Private methods
+
+    private func setCell(model: User) {
+
+        self.nameLabel.text = model.login
+        self.descriptionLabel.text = model.repos
+        self.avatarImageView.image = #imageLiteral(resourceName: "no_image")
+        self.starsImageView.image = nil
+        self.avatarImageView.downloadImage(from: model.avatar)
+    }
+
+    private func setCell(model: Repo) {
+
+        self.nameLabel.text = model.login
+        self.descriptionLabel.text = model.description
+        self.starsCountLabel.text = model.starsCount
+        self.updatedAtLabel.text = model.updatedAt
+
+        self.starsImageView.image = #imageLiteral(resourceName: "star_icon")
+        self.avatarImageView.image = #imageLiteral(resourceName: "no_image")
+        self.avatarImageView.downloadImage(from: model.avatar)
     }
 }

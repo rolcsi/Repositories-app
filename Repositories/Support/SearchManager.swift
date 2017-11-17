@@ -19,8 +19,6 @@ class SearchManager: NSObject {
 
             guard let url = optionalUrl else { return }
 
-            debugPrint("CreateSearchSP is main thread? \(Thread.current.isMainThread)")
-
             let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
             let request = Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default)
 
@@ -31,9 +29,9 @@ class SearchManager: NSObject {
                     guard let dict = json as? [String: Any], let items = dict["items"] as? [[String: Any]] else { return }
 
                     observer.send(value: self.parseUsers(items: items))
-                } else {
+                } else if case .failure(let error) = response.result {
 
-                    observer.send(error: NSError())
+                    observer.send(error: error as NSError)
                     return
                 }
 

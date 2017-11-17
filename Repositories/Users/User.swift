@@ -17,13 +17,13 @@ class User {
     var id: NSNumber!
 
     init() {
-        
+
         self.login = ""
         self.avatar = ""
         self.repos = ""
         self.id = 0
     }
-    
+
     init(id: NSNumber, login: String, avatar: String, repos: String) {
 
         self.login = login
@@ -34,27 +34,27 @@ class User {
 }
 
 class Repo: User {
-    
+
     var description: String!
     var starsCount: String!
     var updatedAt: String!
-    
+
     override init() {
         super.init()
-        
+
         description = ""
         starsCount = ""
         updatedAt = ""
     }
-    
+
     init(item: NSManagedObject) {
         super.init()
-        
+
         login = String.bindNilOrEmpty(item.value(forKey: "fullName"))
         description = String.bindNilOrEmpty(item.value(forKey: "summary"))
         starsCount = String.bindNilOrEmpty(item.value(forKey: "starsCount"))
         updatedAt = String.bindNilOrEmpty(item.value(forKey: "updatedAt"))
-        
+
         guard let owner = item.value(forKey: "owner") as? CDOwner else { return }
         avatar = owner.avatarUrl
     }

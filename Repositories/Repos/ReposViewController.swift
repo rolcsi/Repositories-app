@@ -12,15 +12,14 @@ import Sync
 
 class ReposViewController: UIViewController {
 
-    @IBOutlet weak var tableView: UITableView!
-
-    var user: User?
-
     private static let cellName = "BasicTableViewCell"
     private static let detailIdentifier = "openWebView"
 
+    @IBOutlet weak var tableView: UITableView!
+
+    var user: User?
     var dataStack: DataStack!
-    
+
     private lazy var dataSource: DATASource = {
 
         guard let user = self.user else {
@@ -62,7 +61,7 @@ class ReposViewController: UIViewController {
 
         let sync = SyncManager(dataStack: self.dataStack)
         sync.createSyncSignal(user: user).startWithFailed { (error) in
-            
+
             let alert = UIAlertController.simpleAlert(text: error.localizedDescription)
             self.present(alert, animated: true)
         }
