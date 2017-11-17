@@ -60,7 +60,7 @@ class ReposViewController: UIViewController {
         self.title = user.repos.replacingOccurrences(of: Constants.api, with: "")
 
         let sync = SyncManager(dataStack: self.dataStack)
-        sync.createSyncSignal(user: user).startWithFailed { (error) in
+        sync.createSyncSignal(user: user).startWithFailed { [unowned self] (error) in
 
             let alert = UIAlertController.simpleAlert(text: error.localizedDescription)
             self.present(alert, animated: true)

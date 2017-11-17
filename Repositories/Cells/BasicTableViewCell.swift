@@ -23,12 +23,10 @@ class BasicTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-//        self.starsCountLabel.text = ""
-//        self.updatedAtLabel.text = ""
         self.starsImageView.image = nil
 
         self.model.producer
-            .startWithValues { (model) in
+            .startWithValues { [unowned self] (model) in
 
                 if let repo = model as? Repo {
 

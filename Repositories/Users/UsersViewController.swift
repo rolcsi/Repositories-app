@@ -36,9 +36,10 @@ class UsersViewController: UIViewController {
 
         self.array.producer
             .observe(on: UIScheduler())
-            .startWithResult {_ in
+            .startWithResult {[unowned self] _ in
 
                 self.tableView.reloadData()
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
         }
     }
 
@@ -55,6 +56,8 @@ extension UsersViewController: UISearchBarDelegate {
 
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
 
+        guard searchBar.text != "" else { return }
+        
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
         self.array <~ SearchManager.createSearchSP(with: searchBar.text)
